@@ -40,5 +40,25 @@ int main (int argc, char * argv[])
     //    until there are no more requests to send
     //  * close the message queue
     
+    int status;
+    pid_t idC, idE;
+    idE = fork();
+    if (idE > 0)
+    {
+        idC = fork();
+        if (idC > 0)
+        {
+            A();
+            B();
+            waitpid(idC, &status, 0); // for idC to join
+            D();
+            wait(NULL);
+            printf("workload processed.\n");
+        }
+        else
+        { C(); }
+    }
+    else
+    { E(); }
     return (0);
 }
